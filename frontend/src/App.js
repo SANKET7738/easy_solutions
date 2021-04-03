@@ -6,7 +6,7 @@ import "./App.css";
 function App() {
   const [file, setFile] = useState();
   const [previewUrl, setPreviewUrl] = useState();
-
+  const [questions, setQuestions] = useState([]);
   // for connection between button and input field
   const filePickerRef = useRef();
 
@@ -43,7 +43,10 @@ function App() {
     axios
       .post("http://localhost:5000/", fd)
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        if (res) {
+          setQuestions(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -71,7 +74,9 @@ function App() {
           Pick Image
         </button>
       </div>
-      <button onClick={sendFileHandler}>Post</button>
+      <button onClick={sendFileHandler}>Upload</button>
+      {questions && questions.map((ques, i) => <p key={i}>{ques}</p>)}
+      {questions ? <button onClick={sendFileHandler}>Proceed</button> : ""}
     </div>
   );
 }
