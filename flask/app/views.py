@@ -1,9 +1,10 @@
 from app import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 import os
 import nltk.data
 from PIL import Image
 import pytesseract
+import json
 import re 
 from newspaper import Article
 from googlesearch import search
@@ -46,6 +47,12 @@ def scrape(url):
 
     return text
 
+class JSONEncoder(json.JSONEncoder):
+        def default(self, o):
+            if isinstance(o, ObjectId):
+                return str(o)
+            return json.JSONEncoder.default(self, o)
+
 questions = []
 @app.route("/get-image", methods=["GET", "POST"])
 def get_image(args):
@@ -57,10 +64,14 @@ def get_image(args):
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     tokenized_text = '\n \n'.join(tokenizer.tokenize(text))
     sentences = tokenized_text.split('\n \n')
+    questions = []
     for i in range(len(sentences)):
         if(sentences[i].endswith('?') or  sentences[i].startswith("What") or sentences[i].startswith("When") or sentences[i].startswith("How") or sentences[i].startswith("Why") or sentences[i].startswith("Describe") or sentences[i].startswith("Explain")):
             questions.append(sentences[i])
             print(sentences[i])
+
+    # tosend = JSONEncoder().encode(questions)
+    return jsonify(questions)
     # Questions = questions
     
 
@@ -73,24 +84,27 @@ def answers():
     for i in range(len(questions)):
         query = questions[i]
         output = google_search(query)
-        print(output[0])
-        search_querys.append(output[0])
+        print(output)
+        search_querys.append(output)
 
-    solutions = {}
+    solutions = []
     for i in range(len(search_querys)):
-        keys = questions[i]
+        solution = {}
+        solution['question'] = questions[i]
+        solution['url'] = search_querys[i]
         try:
             answers = scrape(search_querys[i][0])
         except Exception as e:
             print(e)
-            answers = ''
-        values = answers
-        solutions[keys] = values
-    for x,y in solutions.items():
-            print('\n******************\n')
-            print(x)
-            print('\n answer = \n')
-            print(y)
-            print('\n******************\n')
+            answers = 'Sorry! We were not able to find the answer'
+        solution['answer'] = answers
+        solutions.append(solution)
+   
+    # for x,y in solutions.items():
+    #         print('\n******************\n')
+    #         print(x)
+    #         print('\n answer = \n')
+    #         print(y)
+    #         print('\n******************\n')
         
-    return render_template('answers.html')
+    return render_template('answers.html', solutions=solutions)
