@@ -11,7 +11,7 @@ from googlesearch import search
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 nltk.download('punkt')
 
-app.config["IMAGE_UPLOADS"] = r'D:\KJSOM\easy_solutions\flask\app\static\img\uploads'
+app.config["IMAGE_UPLOADS"] = r'D:\easy_solutions\flask\app\static\img\uploads'
 
 
 Questions = []
@@ -61,9 +61,10 @@ def scrape(url):
     article.download()
     article.parse()
     article.nlp()
+    article_img = article.top_img
     text = article.text
 
-    return text
+    return text, article_img
 
 class JSONEncoder(json.JSONEncoder):
         def default(self, o):
@@ -87,11 +88,13 @@ def answers():
         solution['question'] = Questions[i]
         solution['url'] = search_querys[i]
         try:
-            answers = scrape(search_querys[i][0])
+            answers, diagram = scrape(search_querys[i][0])
         except Exception as e:
             print(e)
             answers = 'Sorry! We were not able to find the answer'
+            diagram = ''
         solution['answer'] = answers
+        solution['diagram'] = diagram
         solutions.append(solution)
     return jsonify(solutions)
 
