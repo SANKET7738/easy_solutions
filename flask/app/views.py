@@ -11,7 +11,7 @@ from googlesearch import search
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 nltk.download('punkt')
 
-app.config["IMAGE_UPLOADS"] = r'D:\KJSOM\easy_solutions\flask\app\static\img\uploads'
+app.config["IMAGE_UPLOADS"] = r'D:\easy_solutions\flask\app\static\img\uploads'
 
 
 Questions = []
@@ -93,8 +93,10 @@ class JSONEncoder(json.JSONEncoder):
 #     return render_template("image.html", questions=questions)
 
 
-@app.route('/answers')
+@app.route('/answers',  methods=['GET', 'POST'])
 def answers(questions):
+    raw_req = request.args
+    questions = raw_req['questions']
     search_querys = []
     for i in range(len(questions)):
         query = questions[i]
