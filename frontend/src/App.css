@@ -20,3 +20,9 @@
   height: 100%;
   object-fit: cover;
 }
+
+button {
+  background-color: #ff6f47;
+  border: none;
+  color: white;
+}

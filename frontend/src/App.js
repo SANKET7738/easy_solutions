@@ -53,6 +53,17 @@ function App() {
       });
   };
 
+  const getAnswers = async () => {
+    await axios
+      .get("http://127.0.0.1:5000/answers")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="App">
       <h1>Hello React </h1>
@@ -76,7 +87,7 @@ function App() {
       </div>
       <button onClick={sendFileHandler}>Upload</button>
       {questions && questions.map((ques, i) => <p key={i}>{ques}</p>)}
-      {questions ? <button onClick={sendFileHandler}>Proceed</button> : ""}
+      {questions ? <button onClick={getAnswers}>Proceed</button> : ""}
     </div>
   );
 }
