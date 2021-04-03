@@ -11,7 +11,7 @@ from googlesearch import search
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 nltk.download('punkt')
 
-app.config["IMAGE_UPLOADS"] = r'D:\easy_solutions\flask\app\static\img\uploads'
+app.config["IMAGE_UPLOADS"] = r'D:\KJSOM\easy_solutions\flask\app\static\img\uploads'
 
 
 Questions = []
