@@ -79,7 +79,7 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <div className="App">
-            <h1>Hello React </h1>
+            <h1>Easy Solutions </h1>
             {/* image input */}
             <input
               type="file"
@@ -98,16 +98,27 @@ function App() {
                 Pick Image
               </button>
             </div>
-            <button onClick={sendFileHandler}>Upload</button>
-            {questions && questions.map((ques, i) => <p key={i}>{ques}</p>)}
+            {file && (
+              <button className="uploadBtn" onClick={sendFileHandler}>
+                Upload
+              </button>
+            )}
+            <div className="questions">
+              {questions &&
+                questions.map((ques, i) => (
+                  <p key={i}>{"Q" + (i + 1 + ")") + " " + ques}</p>
+                ))}
+            </div>
             {questions.length !== 0 ? (
               <button onClick={getAnswers}>Proceed</button>
             ) : (
               ""
             )}
-            <Link to="/answers">
-              <button>View answers</button>{" "}
-            </Link>
+            {answers.length !== 0 && (
+              <Link to="/answers">
+                <button className="answersBtn">View answers</button>{" "}
+              </Link>
+            )}
           </div>
         </Route>
         <Route path="/answers" exact>
