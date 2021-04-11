@@ -2,8 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 .App {
   text-align: center;
-  height: 100%;
-  /* overflow: hidden; */
+  height: 100vh;
 }
 
 .image-preview {
@@ -24,9 +23,15 @@
   object-fit: cover;
 }
 
+.dropzone {
+  width: 100%;
+  height: 100vh;
+  border: hidden !important;
+  outline-style: none;
+}
 h1 {
-  font-size: 70px;
-  font-family: "Fredoka One", cursive;
+  font-size: 70px !important;
+  font-family: "Fredoka One", cursive !important;
 }
 
 .uploadBtn {
@@ -38,21 +43,35 @@ h1 {
   width: 200px;
   margin: 20px auto;
 }
+
 a {
   text-decoration: none !important;
 }
+
 button {
-  background-color: #00bb88;
+  background-color: #00bb88 !important;
   padding: 10px 20px;
   border: none;
   font-family: "Roboto", sans-serif;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 6px;
-  letter-spacing: 1px;
+  color: white !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  /* letter-spacing: 1px; */
 }
-
+.checking-Drop p {
+  font-size: 17px;
+  margin-top: 10px !important;
+  color: #00bb88;
+  font-weight: 500;
+}
+.modal {
+  width: 100% !important;
+}
+.modalHeader {
+  text-align: center;
+  font-size: 25px !important;
+}
 /* questions */
 .questions {
   width: 55%;
