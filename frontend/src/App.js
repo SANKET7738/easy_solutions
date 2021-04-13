@@ -11,6 +11,8 @@ import {
 } from "react-router-dom";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+import Spinner from "react-spinkit";
+// import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
 import AnswersList from "./components/AnswersList";
 import "./App.css";
@@ -20,7 +22,8 @@ function App() {
   const [previewUrl, setPreviewUrl] = useState();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [openDimmer, setOpenDimmer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  // const [openDimmer, setOpenDimmer] = useState(false);
 
   // for connection between button and input field
   const filePickerRef = useRef();
@@ -54,6 +57,7 @@ function App() {
   };
 
   const sendFileHandler = () => {
+    setIsLoading(true);
     const fd = new FormData();
     fd.append("image", file, file.name);
     axios
@@ -63,29 +67,34 @@ function App() {
         if (res) {
           setQuestions(res.data);
         }
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   };
 
-  const getAnswers = async () => {
-    await axios
+  const getAnswers = () => {
+    setIsLoading(true);
+    axios
       .get("http://127.0.0.1:5000/answers")
       .then((res) => {
         setAnswers(res.data);
-        console.log(res.data);
+        // console.log(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
+        setIsLoading(false);
+
         console.log(err);
       });
   };
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
-    console.log(isDragActive);
 
-    console.log(acceptedFiles[0]);
+    // console.log(acceptedFiles[0]);
     if (!file) {
       setFile(acceptedFiles[0]);
       return;
@@ -96,6 +105,30 @@ function App() {
     noClick: true,
     onDrop,
   });
+
+  // if (isDragActive) {
+  //   return (
+  //     <div className="App">
+
+  //     </div>
+  //   );
+  // }
+
+  if (isLoading) {
+    return (
+      <div className="loadingBody">
+        <div className="loadingSpinnerDiv">
+          {/* <h2>Fetching Data...please be patient</h2> */}
+          <Spinner
+            className="spinner"
+            name="ball-spin-fade-loader"
+            color="#00bb88"
+            fadeIn="none"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -128,18 +161,7 @@ function App() {
               </div>
               <div className="checking-Drop">
                 {isDragActive ? (
-                  /* <Modal
-                  basic
-                  onClose={() => setOpenDimmer(false)}
-                  onOpen={() => setOpenDimmer(true)}
-                  open={true}
-                  size="small"
-                  // trigger={<Button>Basic Modal</Button>}
-                  className="modal"
-                >
-                  <Header className="modalHeader">Drop it like it's hot</Header>
-                </Modal> */
-                  <p>DROP IT LIKE IT'S HOT</p>
+                  <p>DROP IT LIKE IT'S HOTTT</p>
                 ) : (
                   <p>or drop images here</p>
                 )}
